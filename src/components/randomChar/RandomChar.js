@@ -23,13 +23,25 @@ class RandomChar extends Component {
 
     updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+        // const id = 1011106; с описанием и картинкой
+        // const id = 1011251; без описания и картинки
         this.marvelService
             .getCharacter(id)
             .then(this.onCharLoaded)
     }
 
+    _descriptionMaxLength = (description) => {
+        if (description) {
+            if (description.length >= 210) {
+                return `${description.substring(0, 210)}...`;
+            } else {
+                return description;
+            }
+        }
+    }
+
     render() {
-        const {char: {name, discription, thumbnail, homepage, wiki}} = this.state;
+        const {char: {name, description, thumbnail, homepage, wiki}} = this.state;
 
         return (
             <div className="randomchar">
@@ -38,7 +50,7 @@ class RandomChar extends Component {
                     <div className="randomchar__info">
                         <p className="randomchar__name">{name}</p>
                         <p className="randomchar__descr">
-                            {discription}
+                            {this._descriptionMaxLength(description)}
                         </p>
                         <div className="randomchar__btns">
                             <a href={homepage} className="button button__main">
