@@ -33,6 +33,7 @@ class RandomChar extends Component {
     }
 
     updateChar = () => {
+        this.setState({loading: true})
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
         // const id = 1011106; с описанием и картинкой
         // const id = 1011251; без описания и картинки
@@ -45,7 +46,6 @@ class RandomChar extends Component {
 
     render() {
         const {char, loading, error} = this.state;
-
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
         const content = !(loading || error) ? <View char={char} /> : null;
@@ -63,7 +63,7 @@ class RandomChar extends Component {
                     <p className="randomchar__title">
                         Or choose another one
                     </p>
-                    <button className="button button__main">
+                    <button onClick={this.updateChar} className="button button__main">
                         <div className="inner">try it</div>
                     </button>
                     <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
@@ -76,23 +76,18 @@ class RandomChar extends Component {
 const View = ({char}) => {
     const {name, description, thumbnail, homepage, wiki} = char;
 
-    const _descriptionMaxLength = (description) => {
-        if (description) {
-            if (description.length >= 210) {
-                return `${description.substring(0, 210)}...`;
-            } else {
-                return description;
-            }
-        }
+    let imgStyle = {'objectFit' : 'cover'};
+    if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
+        imgStyle = {'objectFit' : 'contain'};
     }
 
     return (
         <div className="randomchar__block">
-            <img src={thumbnail} alt="Random character" className="randomchar__img"/>
+            <img src={thumbnail} alt="Random character" className="randomchar__img" style={imgStyle}/>
             <div className="randomchar__info">
                 <p className="randomchar__name">{name}</p>
                 <p className="randomchar__descr">
-                    {_descriptionMaxLength(description)}
+                    {description}
                 </p>
                 <div className="randomchar__btns">
                     <a href={homepage} className="button button__main">
