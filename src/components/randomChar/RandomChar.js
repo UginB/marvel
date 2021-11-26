@@ -26,6 +26,10 @@ class RandomChar extends Component {
             loading: false})
     }
 
+    onCharLoading = () => {
+        this.setState({loading: true})
+    }
+
     onError = () => {
         this.setState({
             loading: false,
@@ -33,7 +37,7 @@ class RandomChar extends Component {
     }
 
     updateChar = () => {
-        this.setState({loading: true})
+        this.onCharLoading();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
         // const id = 1011106; с описанием и картинкой
         // const id = 1011251; без описания и картинки
