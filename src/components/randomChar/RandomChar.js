@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Spinner from '../spinner/Spinner'
 import ErrorMessage from '../error/ErrorMessage';
-import MarvelService from '../../services/MarvelService'
+import useMarvelService from '../../services/MarvelService'
 
 import './randomChar.scss';
 
@@ -9,47 +9,33 @@ import mjolnir from '../../resources/img/mjolnir.png';
 
 const RandomChar = () => {
 
-    const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const [char, setChar] = useState(null);
 
-    const marvelService = new MarvelService();
+    const {loading, error, getCharacter, clearError} = useMarvelService();
 
     useEffect(() => {
-        updateChar();
-        // eslint-disable-next-line
+        updateChar(); // eslint-disable-next-line
     }, []);
 
     const onCharLoaded = (char) => {
         setChar(char);
-        setLoading(false);
-    }
-
-    const onCharLoading = () => {
-        setLoading(true);
-    }
-
-    const onError = () => {
-        setLoading(false);
-        setError(true);
     }
 
     const updateChar = () => {
-        onCharLoading();
+        clearError();  // очищает ошибку при следующем нажатии try it
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
         // const id = 1011106; с описанием и картинкой
         // const id = 1011251; без описания и картинки
         // const id = 10112515656565656; ошибка
-        marvelService
-            .getCharacter(id)
+        getCharacter(id)
             .then(onCharLoaded)
-            .catch(onError)
     }
 
     const errorMessage = error ? <ErrorMessage/> : null;
     const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error) ? <View char={char} /> : null;
+    const content = !(loading || error || !char) ? <View char={char} /> : null;
 
+    console.log(content)
     return (
         <div className="randomchar">
             {errorMessage}
