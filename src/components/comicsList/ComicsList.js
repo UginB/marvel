@@ -5,8 +5,8 @@ import ErrorMessage from '../error/ErrorMessage';
 import useMarvelService from '../../services/MarvelService';
 
 import './comicsList.scss';
-import uw from '../../resources/img/UW.png';
-import xMen from '../../resources/img/x-men.png';
+// import uw from '../../resources/img/UW.png';
+// import xMen from '../../resources/img/x-men.png';
 
 const ComicsList = () => {
 
@@ -16,8 +16,6 @@ const ComicsList = () => {
     const [comicsListEnded, setComicsListEnded] = useState(false);
 
     const {loading, error, getComicsList} = useMarvelService();
-
-    getComicsList();
 
     useEffect(() => {
         onRequest(offset, true); //eslint-disable-next-line
@@ -30,38 +28,36 @@ const ComicsList = () => {
             .then(onCharsLoaded)
     }
 
-    const onCharsLoaded = (newChars) => {
+    const onCharsLoaded = (newComics) => {
         let ended = false;
-        if (newChars.length < 9) {
+        if (newComics.length < 8) {
             ended = true;
         }
 
-        setComicsList(chars => [...chars, ...newChars]);
+        setComicsList(comics => [...comics, ...newComics]);
         setNewItemLoading(newItemLoading => false);
         setOffset(offset => offset + 9);
-        setComicsListEnded(charEnded => ended);
+        setComicsListEnded(comicsListEnded => ended);
     }
 
     function renderItems(arr) {
-        const items =  arr.map((item, i) => {
-            let imgStyle = {'objectFit' : 'cover'};
-            if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
-                imgStyle = {'objectFit' : 'unset'};
-            }
-            
+        const items =  arr.map((item, i) => {         
             return (
                 <li 
                     tabIndex={0}
-                    className="char__item"
+                    className="comics__item"
                     key={item.id}>
-                        <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
-                        <div className="char__name">{item.name}</div>
+                        <a href="#">
+                            <img src={item.thumbnail} alt={item.title} className="comics__item-img"/>
+                            <div className="comics__item-name">{item.title}</div>
+                            <div className="comics__item-price">{item.price}</div>
+                        </a>
                 </li>
             )
         });
 
         return (
-            <ul className="char__grid">
+            <ul className="comics__grid">
                 {items}
             </ul>
         )
