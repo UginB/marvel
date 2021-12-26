@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../error/ErrorMessage';
+import AppBanner from '../appBanner/AppBanner';
 
 import './singleComicPage.scss';
 // import xMen from '../../resources/img/x-men.png';
@@ -34,6 +35,7 @@ const SingleComicPage = () => {
 
     return (
         <>
+            <AppBanner/>
             {errorMessage}
             {spinner}
             {content}

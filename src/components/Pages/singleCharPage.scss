@@ -1,0 +1,23 @@
+.single-char {
+    padding-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    width: 900px;
+    min-height: 300px;
+    &__img {
+        width: 293px;
+        min-height: 293px;   
+    }
+    &__info {
+        padding-left: 50px;
+    }
+    &__name {
+        font-weight: bold;
+        font-size: 22px;
+    }
+    &__descr {
+        padding-top: 25px;
+        font-size: 18px;
+        line-height: 21px;
+    }
+}

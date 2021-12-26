@@ -1,30 +1,31 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../error/ErrorMessage';
+import AppBanner from '../appBanner/AppBanner';
 
-import './singleComicPage.scss';
+import './singleCharPage.scss';
 // import xMen from '../../resources/img/x-men.png';
 
 const SingleCharPage = () => {
-    const {CharId} = useParams();
+    const {charId} = useParams();
     const [char, setChar] = useState(null);
     const {loading, error, getCharacter, clearError} = useMarvelService();
 
     useEffect(() => {
         updateChar();
         // eslint-disable-next-line
-    }, [CharId]);
+    }, [charId]);
 
     const updateChar = () => {
         clearError();
-        getCharacter(CharId)
+        getCharacter(charId)
             .then(onCharLoaded)
     }
 
-    const onCharLoaded = (Char) => {
+    const onCharLoaded = (char) => {
         setChar(char);
     }
 
@@ -34,6 +35,7 @@ const SingleCharPage = () => {
 
     return (
         <>
+            <AppBanner/>
             {errorMessage}
             {spinner}
             {content}
@@ -42,15 +44,14 @@ const SingleCharPage = () => {
 }
 
 const View = ({char}) => {
-    const {title, description, thumbnail} = char;
+    const {name, description, thumbnail} = char;
     return (
         <div className="single-char">
-            <img src={thumbnail} alt={title} className="single-char__img"/>
+            <img src={thumbnail} alt={name} className="single-char__img"/>
             <div className="single-char__info">
-                <h2 className="single-char__name">{title}</h2>
+                <h2 className="single-char__name">{name}</h2>
                 <p className="single-char__descr">{description}</p>
             </div>
-            <Link to='/comics' className="single-char__back">Back to all</Link>
         </div>
     )
 }

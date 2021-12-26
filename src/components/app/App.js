@@ -9,6 +9,7 @@ const Page404 = lazy(() => import("../Pages/404"));
 const MainPage = lazy(() => import("../Pages/MainPage"));
 const ComicsPage = lazy(() => import("../Pages/ComicsPage"));
 const SingleComicPage = lazy(() => import("../Pages/SingleComicPage"));
+const SingleCharPage = lazy(() => import("../Pages/SingleCharPage"));
 
 const App = () => {
     return (
@@ -21,6 +22,7 @@ const App = () => {
                             <Route exact path='/' element={<MainPage/>}/>
                             <Route exact path='/comics' element={<ComicsPage/>}/>
                             <Route exact path='/comics/:comicId' element={<SingleComicPage/>}/>
+                            <Route exact path='/character/:charId' element={<SingleCharPage/>}/>
                             <Route path='*' element={<Page404/>}/>
                         </Routes>
                     </Suspense>
@@ -31,7 +33,6 @@ const App = () => {
 }
 
 // class App extends Component {
-
 //     state = {
 //         selectedChar: null
 //     }
