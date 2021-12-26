@@ -5,6 +5,7 @@ import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../error/ErrorMessage';
 import AppBanner from '../appBanner/AppBanner';
+import setContent from '../../utils/setContent';
 
 import './singleCharPage.scss';
 // import xMen from '../../resources/img/x-men.png';
@@ -12,7 +13,7 @@ import './singleCharPage.scss';
 const SingleCharPage = () => {
     const {charId} = useParams();
     const [char, setChar] = useState(null);
-    const {loading, error, getCharacter, clearError} = useMarvelService();
+    const {loading, error, getCharacter, clearError, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -23,28 +24,30 @@ const SingleCharPage = () => {
         clearError();
         getCharacter(charId)
             .then(onCharLoaded)
+            .then(() => setProcess('confirmed'))
     }
 
     const onCharLoaded = (char) => {
         setChar(char);
     }
 
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error || !char) ? <View char={char} /> : null;
+    // const errorMessage = error ? <ErrorMessage/> : null;
+    // const spinner = loading ? <Spinner/> : null;
+    // const content = !(loading || error || !char) ? <View char={char} /> : null;
 
     return (
         <>
             <AppBanner/>
-            {errorMessage}
+            {/* {errorMessage}
             {spinner}
-            {content}
+            {content} */}
+            {setContent(process, View, char)}
         </>
     )
 }
 
-const View = ({char}) => {
-    const {name, description, thumbnail} = char;
+const View = ({data}) => {
+    const {name, description, thumbnail} = data;
     return (
         <div className="single-char">
             <img src={thumbnail} alt={name} className="single-char__img"/>

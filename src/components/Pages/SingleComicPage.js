@@ -3,9 +3,10 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 import useMarvelService from '../../services/MarvelService';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../error/ErrorMessage';
+// import Spinner from '../spinner/Spinner';
+// import ErrorMessage from '../error/ErrorMessage';
 import AppBanner from '../appBanner/AppBanner';
+import setContent from '../../utils/setContent';
 
 import './singleComicPage.scss';
 // import xMen from '../../resources/img/x-men.png';
@@ -13,7 +14,7 @@ import './singleComicPage.scss';
 const SingleComicPage = () => {
     const {comicId} = useParams();
     const [comic, setComic] = useState(null);
-    const {loading, error, getComic, clearError} = useMarvelService();
+    const {loading, error, getComic, clearError, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         updateComic();
@@ -24,28 +25,30 @@ const SingleComicPage = () => {
         clearError();
         getComic(comicId)
             .then(onComicLoaded)
+            .then(() => setProcess('confirmed'))
     }
 
     const onComicLoaded = (comic) => {
         setComic(comic);
     }
 
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error || !comic) ? <View comic={comic} /> : null;
+    // const errorMessage = error ? <ErrorMessage/> : null;
+    // const spinner = loading ? <Spinner/> : null;
+    // const content = !(loading || error || !comic) ? <View comic={comic} /> : null;
 
     return (
         <>
             <AppBanner/>
-            {errorMessage}
+            {/* {errorMessage}
             {spinner}
-            {content}
+            {content} */}
+            {setContent(process, View, comic)}
         </>
     )
 }
 
-const View = ({comic}) => {
-    const {title, description, thumbnail, pageCount, language, price} = comic;
+const View = ({data}) => {
+    const {title, description, thumbnail, pageCount, language, price} = data;
     return (
         <div className="single-comic">
             <Helmet>

@@ -8,6 +8,25 @@ import useMarvelService from '../../services/MarvelService'
 import './charList.scss';
 // import abyss from '../../resources/img/abyss.jpg';
 
+const setContent = (process, Component, newItemLoading) => {
+    switch(process) {
+        case 'waiting':
+            return <Spinner/>;
+            break;
+        case 'loading':
+            return newItemLoading ? <Component/> : <Spinner/>;
+            break;
+        case 'confirmed':
+            return <Component/>; 
+            break;
+        case 'error':
+            return <ErrorMessage/>;
+            break;
+        default:
+            throw new Error('Unexpected process state')
+    }
+}
+
 const CharList = (props) => {
 
     const [chars, setChars] = useState([]);
@@ -16,7 +35,7 @@ const CharList = (props) => {
     const [charEnded, setCharEnded] = useState(false);
 
     // const marvelService = new MarvelService();
-    const {loading, error, getAllCharacters} = useMarvelService();
+    const {loading, error, getAllCharacters, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         onRequest(offset, true); //eslint-disable-next-line
@@ -27,6 +46,7 @@ const CharList = (props) => {
         initial ? setNewItemLoading(false) : setNewItemLoading(true);
         getAllCharacters(offset)
             .then(onCharsLoaded)
+            .then(() => setProcess('confirmed'))
     }
 
     const onCharsLoaded = (newChars) => {
@@ -87,16 +107,17 @@ const CharList = (props) => {
         )
     }
     
-    const items = renderItems(chars);
+    // const items = renderItems(chars);
 
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading && !newItemLoading ? <Spinner/> : null;
+    // const errorMessage = error ? <ErrorMessage/> : null;
+    // const spinner = loading && !newItemLoading ? <Spinner/> : null;
 
     return (
         <div className="char__list">
-            {errorMessage}
+            {/* {errorMessage}
             {spinner}
-            {items}
+            {items} */}
+            {setContent(process, () => renderItems(chars), newItemLoading)}
             <button 
                 className="button button__main button__long"
                 disabled={newItemLoading}
